@@ -1,0 +1,20 @@
+services:
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower:latest
+    network_mode: host
+    environment:
+      - TZ=Europe/Brussel
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_REMOVE_VOLUMES=true
+      - WATCHTOWER_SCHEDULE= 0 0 4 * * *
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_ROLLING_RESTART=true
+      - WATCHTOWER_DEBUG=true
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      - WATCHTOWER_NOTIFICATION_URL=discord://Token@ID
+      - WATCHTOWER_NOTIFICATION_TEMLATE='{{range .}}{{.Time.Format "12-01-2020 15:04:05"}} ({{.Level}})\':\' {{.Message}}{{println}}{{end}}'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
