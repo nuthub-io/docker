@@ -1,0 +1,30 @@
+services:
+  jellyfin:
+    image: docker.io/jellyfin/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Brussels
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - hetzner:/hetzner
+      - nas:/nas
+    restart: unless-stopped
+    network_mode: host
+
+volumes:
+  hetzner:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: "//server/ip/share"
+      o: "username=example,password=example,uid=0,gid=0"
+
+  nas:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=server/ip,rw,vers=4
+      device: ":/volume1/media"
